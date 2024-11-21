@@ -1,0 +1,127 @@
+.app {
+  text-align: center;
+  background-color: #e0e0e0;
+  color: #333;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.app__header {
+  margin-bottom: 20px;
+}
+
+.app__title {
+  font-size: 2.5rem;
+  margin: 10px 0;
+}
+
+.app__main {
+  /* Styles specific to main can be added here */
+}
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.search-bar__input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.search-bar__button {
+  padding: 10px;
+  border: none;
+  background-color: #61dafb;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.weather-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+}
+
+.weather-card__temperature {
+  font-size: 4rem;
+  font-weight: bold;
+}
+
+.recent-searches {
+  margin-top: 20px;
+}
+
+.recent-searches__title {
+  margin-bottom: 10px;
+}
+
+.recent-searches__list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.recent-searches__item {
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.recent-searches__item:hover {
+  background-color: #f0f0f0;
+}
+
+.suggestions {
+  position: absolute;
+  border: 1px solid #ccc;
+  background: white;
+  list-style-type: none;
+  padding: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1;
+}
+
+.suggestions li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestions li:hover {
+  background-color: #f0f0f0;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .app {
+    padding: 10px;
+  }
+
+  .weather-card {
+    padding: 15px;
+  }
+
+  .search-bar__input {
+    padding: 8px;
+  }
+
+  .search-bar__button {
+    padding: 8px;
+  }
+}
+
+@media (min-width: 600px) {
+  .recent-searches__list {
+    justify-content: space-around;
+  }
+}
