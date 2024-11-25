@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Select from 'react-select';
 import axios from 'axios';
 
-const SearchBar = ({ fetchWeatherData }) => {
+const SearchBar = ({ fetchWeatherData, setErrorMessage }) => {
     const [city, setCity] = useState('');
     const [options, setOptions] = useState([]);
 
@@ -25,8 +25,11 @@ const SearchBar = ({ fetchWeatherData }) => {
                 }));
                 setOptions(cityOptions.length > 0 ? cityOptions : [{ label: "No results found", value: "" }]);
             } catch (error) {
-                console.error("Error fetching city suggestions", error);
-                setOptions([{ label: "Error fetching suggestions", value: "" }]);
+                if (error.response) {
+                    setErrorMessage("An error occurred while fetching city suggestions. Please try again.");
+                } else {
+                    setErrorMessage("Network error: Please check your internet connection.");
+                }
             }
         } else {
             setOptions([]);

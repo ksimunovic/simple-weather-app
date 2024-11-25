@@ -8,40 +8,34 @@ import './App.css';
 function App() {
   const [weatherData, setWeatherData] = useState(null);
   const [recentSearches, setRecentSearches] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(''); // New state for error messages
   const apiKey = process.env.REACT_APP_YOUR_WEATHER_API_KEY;
 
   const fetchWeatherData = useCallback(async (city, intervalUpdate = false) => {
     if (!city) return;
+    setErrorMessage(''); // Clear previous error message
     try {
       const response = await axios.get(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`);
 
-      const lastSelectedCity = localStorage.getItem('lastSelectedCity');
-
-      if (lastSelectedCity && city == lastSelectedCity) {
+      if (response.status === 200) {
         setWeatherData(response.data);
       }
-      const newSearch = { name: city, temp: response.data.current.temp_c };
-
-      setRecentSearches(prevSearches => {
-        let exists = false;
-
-        prevSearches.forEach(search => {
-          if (search.name === city) {
-            search.temp = newSearch.temp; // Update temp if city exists
-            exists = true;
-          }
-        });
-
-        if (!exists) {
-          return [newSearch, ...prevSearches]; // Add new search to the front
-        }
-
-        return [...prevSearches]; // Return without changes if city exists
-      });
-
-
     } catch (error) {
-      console.error("Error fetching weather data", error);
+      if (error.response) {
+        switch (error.response.status) {
+          case 404:
+            setErrorMessage(`City "${city}" not found.`);
+            break;
+          case 401:
+            setErrorMessage("Unauthorized request. Check your API key.");
+            break;
+          default:
+            setErrorMessage("Error fetching weather data. Please try again later.");
+            break;
+        }
+      } else {
+        setErrorMessage("Network error: Please check your internet connection.");
+      }
     }
   }, [apiKey]);
 
@@ -58,7 +52,7 @@ function App() {
       storedSearches.forEach(search => {
         fetchWeatherData(search.name, true);
       });
-    }, 5000);
+    }, 60000);
 
     return () => clearInterval(intervalId);
   }, [fetchWeatherData]);
@@ -67,9 +61,10 @@ function App() {
     <div className="app">
       <header className="app__header">
         <h1 className="app__title">My Weather Application</h1>
-        <SearchBar fetchWeatherData={fetchWeatherData} />
+        <SearchBar fetchWeatherData={fetchWeatherData} setErrorMessage={setErrorMessage} />
       </header>
       <main className="app__main">
+        {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Display error message */}
         {weatherData && <WeatherCard data={weatherData} />}
         <RecentSearches searches={recentSearches} fetchWeatherData={fetchWeatherData} />
       </main>
