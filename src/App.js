@@ -15,7 +15,7 @@ function App() {
     if (!city) return;
     setErrorMessage(''); // Clear previous error message
     try {
-      const response = await axios.get(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`);
+      const response = await axios.get(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}}&aqi=yes`);
 
       if (response.status === 200) {
         setWeatherData(response.data);

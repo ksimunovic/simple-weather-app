@@ -16,7 +16,7 @@ const SearchBar = ({ fetchWeatherData, setErrorMessage }) => {
                     return {
                         label: (
                             <div>
-                                {city.name}, {city.region} - {weatherResponse.data.current.temp_c}°C
+                                {city.name}{city.region ? `, ${city.region}` : ''} - {weatherResponse.data.current.temp_c}°C
                                 <img src={weatherResponse.data.current.condition.icon} alt={weatherResponse.data.current.condition.text} style={{ width: 20, height: 20 }} />
                             </div>
                         ),
