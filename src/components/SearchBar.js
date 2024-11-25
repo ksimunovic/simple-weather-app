@@ -54,6 +54,8 @@ const SearchBar = ({ fetchWeatherData }) => {
                 isSearchable
                 noOptionsMessage={() => (city ? "No results found" : "")}
                 menuIsOpen={city.length > 0 && options.length > 0}
+                aria-label="Search for city weather"
+                tabIndex={0}
             />
         </div>
     );
