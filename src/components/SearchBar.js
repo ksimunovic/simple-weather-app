@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Select from 'react-select';
 import axios from 'axios';
+import { ThemeContext } from '../ThemeContext'; // Adjust the path as needed
 
 const SearchBar = ({ fetchWeatherData, setErrorMessage }) => {
     const [city, setCity] = useState('');
     const [options, setOptions] = useState([]);
+    const { theme } = useContext(ThemeContext); // Get the current theme
 
     const handleInputChange = async (inputValue) => {
         setCity(inputValue);
@@ -25,11 +27,7 @@ const SearchBar = ({ fetchWeatherData, setErrorMessage }) => {
                 }));
                 setOptions(cityOptions.length > 0 ? cityOptions : [{ label: "No results found", value: "" }]);
             } catch (error) {
-                if (error.response) {
-                    setErrorMessage("An error occurred while fetching city suggestions. Please try again.");
-                } else {
-                    setErrorMessage("Network error: Please check your internet connection.");
-                }
+                setErrorMessage("An error occurred. Please try again.");
             }
         } else {
             setOptions([]);
@@ -44,9 +42,43 @@ const SearchBar = ({ fetchWeatherData, setErrorMessage }) => {
         }
     };
 
+    const customStyles = {
+        menu: (provided) => ({
+            ...provided,
+            backgroundColor: theme === 'dark' ? '#333' : '#fff',
+        }),
+        control: (provided) => ({
+            ...provided,
+            backgroundColor: theme === 'dark' ? '#444' : '#fff', // Change background color for contrast
+            borderColor: theme === 'dark' ? '#555' : '#ccc',
+            color: theme === 'dark' ? '#e0e0e0' : '#333',
+        }),
+        singleValue: (provided) => ({
+            ...provided,
+            color: theme === 'dark' ? '#e0e0e0' : '#333', // Light text color
+        }),
+        placeholder: (provided) => ({
+            ...provided,
+            color: theme === 'dark' ? '#e0e0e0' : '#999', // Light placeholder text
+        }),
+        input: (provided) => ({
+            ...provided,
+            color: theme === 'dark' ? '#e0e0e0' : '#333', // Light input text
+        }),
+        option: (provided, state) => ({
+            ...provided,
+            backgroundColor: state.isSelected ? (theme === 'dark' ? '#666' : '#eee') : (theme === 'dark' ? '#333' : '#fff'),
+            color: theme === 'dark' ? '#e0e0e0' : '#333',
+            '&:hover': {
+                backgroundColor: theme === 'dark' ? '#666' : '#f0f0f0',
+            },
+        }),
+    };
+
     return (
         <div className="search-bar">
             <Select
+                styles={customStyles}
                 className='search-bar__select'
                 inputValue={city}
                 onInputChange={handleInputChange}
