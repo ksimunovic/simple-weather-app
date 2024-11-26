@@ -1,13 +1,26 @@
+@use '../styles/variables' as *;
+
 .theme-toggle {
     padding: 10px;
     border: none;
-    background-color: #fff;
-    color: #333;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
 
-    &:hover {
-        background-color: #f0f0f0;
+    &.light {
+        background-color: $primary-bg-color;
+
+        &:hover {
+            background-color: #ccc;
+        }
+    }
+
+    &.dark {
+        background-color: #444;
+        color: $dark-text-color;
+
+        &:hover {
+            background-color: #555;
+        }
     }
 }

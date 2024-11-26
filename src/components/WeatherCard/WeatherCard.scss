@@ -1,5 +1,7 @@
+@use '../../styles/variables' as *;
+
 .weather-card {
-  background-color: white;
+  background-color: $card-bg-color;
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -17,7 +19,7 @@
 
 .light {
   .weather-card {
-    background-color: white;
+    background-color: $card-bg-color;
   }
 }
 

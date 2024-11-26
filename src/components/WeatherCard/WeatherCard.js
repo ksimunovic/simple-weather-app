@@ -21,7 +21,7 @@ const WeatherCard = ({ data }) => {
                     <p className="weather-card__condition">{current.condition.text}</p>
                 </>
             )}
-            <p className="weather-card__aqi">AQI: {airQuality.pm10 ? airQuality.pm10 : 'Data not available'} μg/m³</p>
+            <p className="weather-card__aqi">AQI (PM10): {airQuality.pm10 ? airQuality.pm10 : 'Data not available'} μg/m³</p>
         </div>
     );
 };

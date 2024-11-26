@@ -1,3 +1,5 @@
+@use '../../styles/variables' as *;
+
 .recent-searches {
   margin-top: 20px;
 
@@ -16,19 +18,29 @@
   }
 
   &__item {
-    background-color: white;
+    background-color: $card-bg-color;
     border-radius: 10px;
     padding: 10px 20px;
     margin: 5px;
     cursor: pointer;
     transition: background-color 0.2s;
+    position: relative;
 
     &:hover {
       background-color: #f0f0f0;
     }
   }
+
+  &__remove {
+    font-size: 1rem;
+    cursor: pointer;
+    position: absolute;
+    right: 5px;
+    top: 0;
+  }
 }
 
+// Media Query
 @media (min-width: 600px) {
   .recent-searches__list {
     justify-content: space-around;
@@ -37,18 +49,14 @@
 
 .light {
   .recent-searches__item {
-    background-color: white;
-  }
-
-  .recent-searches__item:hover {
-    background-color: #f0f0f0;
+    background-color: $card-bg-color;
   }
 }
 
 .dark {
   .recent-searches__item {
     background-color: #555;
-    color: #e0e0e0;
+    color: $dark-text-color;
   }
 
   .recent-searches__item:hover {

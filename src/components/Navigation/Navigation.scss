@@ -1,9 +1,11 @@
+@use '../../styles/variables' as *;
+
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    color: white;
+    color: $dark-text-color;
     position: absolute;
     top: 0;
     right: 0;

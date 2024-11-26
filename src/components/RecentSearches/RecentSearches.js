@@ -1,16 +1,25 @@
 import React from 'react';
+import SearchItem from '../SearchItem/SearchItem';
 import './RecentSearches.scss';
 
-const RecentSearches = ({ searches, fetchWeatherData }) => {
+const RecentSearches = ({ searches, setRecentSearches, fetchWeatherData }) => {
+    const moveSearch = (fromIndex, toIndex) => {
+        const updatedSearches = [...searches];
+        const [movedItem] = updatedSearches.splice(fromIndex, 1);
+        updatedSearches.splice(toIndex, 0, movedItem);
+        setRecentSearches(updatedSearches);
+        localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+    };
+
     const handleOnClick = (item) => {
         localStorage.setItem('lastSelectedCity', item.name);
         fetchWeatherData(item.name);
     };
 
-    const handleOnKeyDown = (event, item) => {
-        if (event.key === 'Enter') {
-            handleOnClick(item);
-        }
+    const removeSearch = (index) => {
+        const updatedSearches = searches.filter((_, i) => i !== index);
+        setRecentSearches(updatedSearches);
+        localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
     };
 
     return (
@@ -18,17 +27,14 @@ const RecentSearches = ({ searches, fetchWeatherData }) => {
             <h3 id="recent-searches-title" className="recent-searches__title">Recent searches</h3>
             <div className="recent-searches__list">
                 {searches.map((item, index) => (
-                    <div 
-                        key={index} 
-                        className="recent-searches__item" 
-                        onClick={() => handleOnClick(item)}
-                        onKeyDown={(event) => handleOnKeyDown(event, item)} 
-                        role="button" 
-                        tabIndex={0}
-                        aria-label={`Search weather for ${item.name} at ${item.temp} degrees`}
-                    >
-                        {item.name} - {item.temp}°C
-                    </div>
+                    <SearchItem
+                        key={index}
+                        item={item}
+                        index={index}
+                        moveSearch={moveSearch}
+                        handleOnClick={handleOnClick}
+                        removeSearch={removeSearch}
+                    />
                 ))}
             </div>
         </div>

@@ -11,7 +11,7 @@ const Navigation = () => {
     return (
         <nav className="navbar">
             <button
-                className="theme-toggle"
+                className={`theme-toggle ${theme}`}
                 onClick={toggleTheme}
                 aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
             >
