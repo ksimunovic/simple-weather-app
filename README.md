@@ -1,55 +1,28 @@
-# My Weather Application
+# Simple Weather App
 
-A React-based weather application that fetches and displays weather data based on user search input.
+## Live Demo
+You can access the live application [here](https://simple-weather-app-eta.vercel.app/).
 
-## Setup Instructions
-
-### Prerequisites
-
-- Node.js (v14 or higher)
-- npm (v5.6 or higher)
-
-### Getting Started
-
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   cd my-weather-app
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables:**
-   - Create a `.env` file in the root directory.
-   - Add your Weather API key as follows:
-     ```plaintext
-     REACT_APP_YOUR_WEATHER_API_KEY=your_api_key_here
-     ```
-
-4. **Start the application:**
-   ```bash
-   npm start
-   ```
-
-5. **Open your browser:**
-   Navigate to `http://localhost:3000` to see the application in action.
+## Description
+The Simple Weather App allows users to search for current weather conditions in various cities around the world. The application fetches real-time weather data, including temperature, air quality, and weather conditions, using the Weather API. 
 
 ### Features
+- **Current Weather Data**: Displays temperature, weather condition, and air quality.
+- **Recent Searches**: Keeps track of recently searched cities for quick access.
+- **Geolocation**: Automatically fetches weather based on the user's current location.
+- **Theme Toggle**: Support for light and dark themes to enhance user experience.
 
-- Search for city weather.
-- Display recent searches with temperature.
-- Automatically update weather data for recent searches.
-
-### Built With
-
+### Technologies Used
 - React
-- Axios
-- CSS for styling
-- React Select for search input
+- React Context API
+- React DnD for drag-and-drop functionality
+- Axios for API calls
+- SCSS for styling
 
-### License
+### Get Started
+1. Clone the repository.
+2. Install dependencies by running `npm install`.
+3. Set your API key in an `.env` file as `REACT_APP_YOUR_WEATHER_API_KEY`.
+4. Start the application with `npm start`. 
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+Enjoy exploring the weather!
