@@ -1,45 +1,14 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import WeatherCard from '../WeatherCard/WeatherCard';
 import SearchBar from '../SearchBar/SearchBar';
 import RecentSearches from '../RecentSearches/RecentSearches';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import useFetchWeather from '../../hooks/useFetchWeather';
+import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 const MainComponent = () => {
-    const [weatherData, setWeatherData] = useState(null);
+    const { weatherData, errorMessage, fetchWeather } = useFetchWeather();
     const [recentSearches, setRecentSearches] = useState([]);
-    const [errorMessage, setErrorMessage] = useState('');
-    const apiKey = process.env.REACT_APP_YOUR_WEATHER_API_KEY;
-
-    const fetchWeatherData = useCallback(async (city, intervalUpdate = false) => {
-        if (!city) return;
-        setErrorMessage('');
-        try {
-            const response = await axios.get(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=yes`);
-            if (response.status === 200) {
-                setWeatherData(response.data);
-            }
-        } catch (error) {
-            handleFetchError(error, city);
-        }
-    }, [apiKey]);
-
-    const handleFetchError = (error, city) => {
-        if (error.response) {
-            switch (error.response.status) {
-                case 404:
-                    setErrorMessage(`City "${city}" not found.`);
-                    break;
-                case 401:
-                    setErrorMessage("Unauthorized request. Check your API key.");
-                    break;
-                default:
-                    setErrorMessage("Error fetching weather data. Please try again later.");
-                    break;
-            }
-        } else {
-            setErrorMessage("Network error: Please check your internet connection.");
-        }
-    };
 
     useEffect(() => {
         const storedSearches = JSON.parse(localStorage.getItem('recentSearches')) || [];
@@ -47,31 +16,25 @@ const MainComponent = () => {
 
         const lastSelectedCity = localStorage.getItem('lastSelectedCity');
         if (lastSelectedCity) {
-            fetchWeatherData(lastSelectedCity);
+            fetchWeather(lastSelectedCity);
         }
-
-        const intervalId = setInterval(() => {
-            storedSearches.forEach(search => {
-                fetchWeatherData(search.name, true);
-            });
-        }, 60000);
-
-        return () => clearInterval(intervalId);
-    }, [fetchWeatherData]);
+    }, [fetchWeather]);
 
     return (
-        <div className="app">
-            <header className="app__header">
-                <h1 className="app__title">My Weather Application</h1>
-                <SearchBar fetchWeatherData={fetchWeatherData} setErrorMessage={setErrorMessage} />
-            </header>
-            <main className="app__main">
-                {errorMessage && <div className="error-message">{errorMessage}</div>}
-                {weatherData && <WeatherCard data={weatherData} />}
-                <RecentSearches searches={recentSearches} fetchWeatherData={fetchWeatherData} />
-            </main>
-        </div>
+        <ErrorBoundary>
+            <div className="app">
+                <header className="app__header">
+                    <h1 className="app__title">My Weather Application</h1>
+                    <SearchBar fetchWeatherData={fetchWeather} />
+                </header>
+                <main className="app__main">
+                    <ErrorMessage message={errorMessage} />
+                    {weatherData && <WeatherCard data={weatherData} />}
+                    <RecentSearches searches={recentSearches} fetchWeatherData={fetchWeather} />
+                </main>
+            </div>
+        </ErrorBoundary>
     );
-}
+};
 
 export default MainComponent;

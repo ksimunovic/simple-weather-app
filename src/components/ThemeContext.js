@@ -1,24 +1,34 @@
 import React, { createContext, useContext, useState } from 'react';
 
- // Create context
- export const ThemeContext = createContext();
+export const ThemeContext = createContext();
 
- // Custom hook for using theme context
- export const useTheme = () => {
-     return useContext(ThemeContext);
- };
+export const useTheme = () => {
+    return useContext(ThemeContext);
+};
 
- // Theme provider component
- export const ThemeProvider = ({ children }) => {
-     const [theme, setTheme] = useState('light'); // 'light' or 'dark'
+const themes = {
+    light: {
+        backgroundColor: '#e0e0e0',
+        color: '#333',
+    },
+    dark: {
+        backgroundColor: '#333',
+        color: '#e0e0e0',
+    },
+};
 
-     const toggleTheme = () => {
-         setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
-     };
+export const ThemeProvider = ({ children }) => {
+    const [theme, setTheme] = useState('light');
 
-     return (
-         <ThemeContext.Provider value={{ theme, toggleTheme }}>
-             <div className={theme}>{children}</div>
-         </ThemeContext.Provider>
-     );
- };
+    const toggleTheme = () => {
+        setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+    };
+
+    return (
+        <ThemeContext.Provider value={{ theme, toggleTheme }}>
+            <div style={{ backgroundColor: themes[theme].backgroundColor, color: themes[theme].color }}>
+                {children}
+            </div>
+        </ThemeContext.Provider>
+    );
+};

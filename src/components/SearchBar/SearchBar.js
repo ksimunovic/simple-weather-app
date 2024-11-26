@@ -1,34 +1,32 @@
 import React, { useState, useContext } from 'react';
 import Select from 'react-select';
-import axios from 'axios';
 import { ThemeContext } from '../../contexts/ThemeContext';
+import useFetchWeather from '../../hooks/useFetchWeather';
 import './SearchBar.scss';
 
-const SearchBar = ({ fetchWeatherData, setErrorMessage }) => {
+const SearchBar = () => {
     const [city, setCity] = useState('');
     const [options, setOptions] = useState([]);
     const { theme } = useContext(ThemeContext);
+    const { fetchWeatherData, setErrorMessage } = useFetchWeather();
 
     const handleInputChange = async (inputValue) => {
         setCity(inputValue);
         if (inputValue.length > 2) {
             try {
-                const response = await axios.get(`https://api.weatherapi.com/v1/search.json?key=${process.env.REACT_APP_YOUR_WEATHER_API_KEY}&q=${inputValue}`);
-                const cityOptions = await Promise.all(response.data.map(async (city) => {
-                    const weatherResponse = await axios.get(`https://api.weatherapi.com/v1/current.json?key=${process.env.REACT_APP_YOUR_WEATHER_API_KEY}&q=${city.name}`);
-                    return {
-                        label: (
-                            <div>
-                                {city.name}{city.region ? `, ${city.region}` : ''} - {weatherResponse.data.current.temp_c}°C
-                                <img src={weatherResponse.data.current.condition.icon} alt={weatherResponse.data.current.condition.text} style={{ width: 20, height: 20 }} />
-                            </div>
-                        ),
+                const response = await fetchWeatherData(inputValue);
+                if (response.data.length === 0) {
+                    setOptions([{ label: "No results found", value: "" }]);
+                } else {
+                    const cityOptions = response.data.map(city => ({
+                        label: `${city.name}, ${city.region || "Unknown"} - ${city.temp_c}°C`,
                         value: city.name,
-                    };
-                }));
-                setOptions(cityOptions.length > 0 ? cityOptions : [{ label: "No results found", value: "" }]);
+                    }));
+                    setOptions(cityOptions);
+                }
             } catch (error) {
-                setErrorMessage("An error occurred. Please try again.");
+                console.error(error);
+                setErrorMessage("Error fetching city data. Please try again.");
             }
         } else {
             setOptions([]);
@@ -52,27 +50,10 @@ const SearchBar = ({ fetchWeatherData, setErrorMessage }) => {
             ...provided,
             backgroundColor: theme === 'dark' ? '#444' : '#fff',
             borderColor: theme === 'dark' ? '#555' : '#ccc',
-            color: theme === 'dark' ? '#e0e0e0' : '#333',
-        }),
-        singleValue: (provided) => ({
-            ...provided,
-            color: theme === 'dark' ? '#e0e0e0' : '#333',
-        }),
-        placeholder: (provided) => ({
-            ...provided,
-            color: theme === 'dark' ? '#e0e0e0' : '#999',
-        }),
-        input: (provided) => ({
-            ...provided,
-            color: theme === 'dark' ? '#e0e0e0' : '#333',
         }),
         option: (provided, state) => ({
             ...provided,
-            backgroundColor: state.isSelected ? (theme === 'dark' ? '#666' : '#eee') : (theme === 'dark' ? '#333' : '#fff'),
-            color: theme === 'dark' ? '#e0e0e0' : '#333',
-            '&:hover': {
-                backgroundColor: theme === 'dark' ? '#666' : '#f0f0f0',
-            },
+            backgroundColor: state.isFocused ? (theme === 'dark' ? '#666' : '#eee') : (theme === 'dark' ? '#333' : '#fff'),
         }),
     };
 
@@ -80,7 +61,6 @@ const SearchBar = ({ fetchWeatherData, setErrorMessage }) => {
         <div className="search-bar">
             <Select
                 styles={customStyles}
-                className='search-bar__select'
                 inputValue={city}
                 onInputChange={handleInputChange}
                 options={options}
@@ -88,10 +68,6 @@ const SearchBar = ({ fetchWeatherData, setErrorMessage }) => {
                 placeholder="Search for city"
                 isClearable
                 isSearchable
-                noOptionsMessage={() => (city ? "No results found" : "")}
-                menuIsOpen={city.length > 0 && options.length > 0}
-                aria-label="Search for city weather"
-                tabIndex={0}
             />
         </div>
     );
