@@ -1,0 +1,57 @@
+.recent-searches {
+  margin-top: 20px;
+
+  &__title {
+    margin-bottom: 10px;
+  }
+
+  &__list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    @media (min-width: 600px) {
+      justify-content: space-around;
+    }
+  }
+
+  &__item {
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #f0f0f0;
+    }
+  }
+}
+
+@media (min-width: 600px) {
+  .recent-searches__list {
+    justify-content: space-around;
+  }
+}
+
+.light {
+  .recent-searches__item {
+    background-color: white;
+  }
+
+  .recent-searches__item:hover {
+    background-color: #f0f0f0;
+  }
+}
+
+.dark {
+  .recent-searches__item {
+    background-color: #555;
+    color: #e0e0e0;
+  }
+
+  .recent-searches__item:hover {
+    background-color: #666;
+  }
+}

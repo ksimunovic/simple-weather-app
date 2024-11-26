@@ -1,13 +1,14 @@
 import React from 'react';
-import { ThemeProvider } from './ThemeContext'; // Adjust the path as needed
-import MainComponent from './MainComponent';
-import Navigation from './Navigation';
+import { ThemeProvider } from './contexts/ThemeContext';
+import MainComponent from './components/MainComponent/MainComponent';
+import Navigation from './components/Navigation/Navigation';
+import './styles/App.scss';
 
 function App() {
     return (
         <ThemeProvider>
             <MainComponent />
-            <Navigation/>
+            <Navigation />
         </ThemeProvider>
     );
 }

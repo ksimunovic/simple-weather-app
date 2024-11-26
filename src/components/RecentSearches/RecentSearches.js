@@ -1,4 +1,5 @@
 import React from 'react';
+import './RecentSearches.scss';
 
 const RecentSearches = ({ searches, fetchWeatherData }) => {
     const handleOnClick = (item) => {
